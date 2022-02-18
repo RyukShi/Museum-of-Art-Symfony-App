@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Artwork{% endblock %}
+
+{% block body %}
+    <div class="mt-3 container">
+        <h4>Add Artwork Form</h4>
+        {{ form_start(artworkForm) }}
+            {% if form_errors(artworkForm) is not empty %}
+                {{ form_errors(artworkForm) }}
+            {% endif %}
+            {{ form_row(artworkForm.number) }}
+            {{ form_row(artworkForm.name) }}
+            {{ form_row(artworkForm.title)}}
+            {{ form_row(artworkForm.dimensions)}}
+            {{ form_row(artworkForm.medium)}}
+            {{ form_row(artworkForm.classification)}}
+            {{ form_row(artworkForm.dating_artwork)}}
+            {{ form_row(artworkForm.Artist)}}
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Create new artwork !</button>
+            </div>
+        {{ form_end(artworkForm) }}
+    </div>
+{% endblock %}

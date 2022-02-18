@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Classification{% endblock %}
+
+{% block body %}
+    <div class="mt-3 container">
+        <h4>Add Classification Form</h4>
+        {{ form_start(classificationForm) }}
+            {% if form_errors(classificationForm) is not empty %}
+                {{ form_errors(classificationForm) }}
+            {% endif %}
+            {{ form_row(classificationForm.classification) }}
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Create new classification !</button>
+            </div>
+        {{ form_end(classificationForm) }}
+    </div>
+{% endblock %}

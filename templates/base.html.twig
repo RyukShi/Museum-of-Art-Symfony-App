@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Home Page{% endblock %}</title>
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+            <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+            <script src="{{ asset('js/bootstrap.bundle.js') }}"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top" style="margin-bottom: 30px;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{{ path('home_page') }}">Museum of Art</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('all_artist') }}">Artists</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('all_artwork') }}">Artworks</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('all_classification') }}">Classifications</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('all_dating_artwork') }}">Dating Artwork</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('all_localisation') }}">Localisations</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Data Manager
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{{ path('add_artist') }}">Add Arttist</a></li>
+                                <li><a class="dropdown-item" href="{{  path('add_artwork') }}">Add Artwork</a></li>
+                                <li><a class="dropdown-item" href="{{  path('add_classification') }}">Add Classification</a></li>
+                                <li><a class="dropdown-item" href="{{  path('add_dating_artwork') }}">Add Dating</a></li>
+                                <li><a class="dropdown-item" href="{{  path('add_localisation') }}">Add Localisation</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% block body %}{% endblock %}
+        <footer class="footer mt-4 bg-primary" style="padding-top : 50px;">
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center" style="color : white;">© 2022 Copyright:
+                <a href="{{ path('home_page') }}"> Museum of Art</a>
+            </div>
+
+        </footer>
+    </body>
+</html>

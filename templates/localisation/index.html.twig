@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All Localisations{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h4>{{ length }} localisation(s) found</h4>
+
+        {% if deleteMessage is not empty %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ deleteMessage }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+
+    <table class="table table-primary">
+        <thead>
+            <tr>
+                <th scope="col"># id</th>
+                {% for column in localisationColumns %}
+                    <th scope="col">{{ column }}</th>
+                {% endfor %}
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for localisation in localisations %}
+                <tr>
+                    <th scope="row">{{ localisation.id }}</th>
+                    <td>{{ localisation.culture }}</td>
+                    <td>{{ localisation.period }}</td>
+                    <td>{{ localisation.dynasty }}</td>
+                    <td>{{ localisation.reign }}</td>
+                    <td>{{ localisation.region }}</td>
+                    <td>{{ localisation.subregion }}</td>
+                    <td>{{ localisation.country }}</td>
+                    <td>{{ localisation.county }}</td>
+                    <td>{{ localisation.city }}</td>
+                    <td>{{ localisation.locale }}</td>
+                    <td>{{ localisation.locus }}</td>
+                    <td>{{ localisation.river }}</td>
+                    <td>{{ localisation.excavation }}</td>
+                    <td><a class="btn btn-primary" href="{{ path('one_localisation', {'id': localisation.id}) }}" role="button">Show</a></td>
+                    <td><a class="btn btn-danger" href="{{ path('remove_localisation', {'id': localisation.id}) }}" role="button">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}
