@@ -14,7 +14,20 @@
         </div>
     {% endif %}
 
-    <table class="table table-primary">
+    {{ form_start(searchArtistForm) }}
+        <div style="display: flex; justify-content: space-evenly;">
+            {{ form_row(searchArtistForm.display_name )}}
+            {{ form_row(searchArtistForm.begin_date) }}
+            {{ form_row(searchArtistForm.end_date) }}
+            {{ form_row(searchArtistForm.gender) }}
+        </div>
+        {{ form_row(searchArtistForm.nationality) }}
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Search !</button>
+        </div>
+    {{ form_end(searchArtistForm) }}
+
+    <table class="table table-primary mt-4">
         <thead>
             <tr>
                 <th scope="col"># id</th>
@@ -40,5 +53,8 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+<div class="container-fluid mt-4" style="display: flex; justify-content: center;">
+    {{ knp_pagination_render(artists, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
 </div>
 {% endblock %}

@@ -8,19 +8,27 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Repository\ClassificationRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Classification;
 use App\Form\ClassificationType;
+use App\Form\SearchClassificationType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
+use App\Data\SearchData;
 
 class ClassificationController extends AbstractController
 {
     /**
      * @Route("/classification", name="all_classification")
      */
-    public function index(ClassificationRepository $repository, string $deleteMessage = null): Response
+    public function index(ClassificationRepository $repository, string $deleteMessage = null,
+    Request $request, PaginatorInterface $paginator): Response
     {
-        $allClassifications = $repository->findAll();
+        $searchClassificationData = new SearchData();
+        $searchClassificationData->page = $request->get('page', 1);
+        $form = $this->createForm(SearchClassificationType::class, $searchClassificationData);
+        $form->handleRequest($request);
+        $data = $repository->findSearch($searchClassificationData);
 
         if (isset($_GET['deleteMessage']) && !empty($_GET['deleteMessage'])) {
             $deleteMessage = htmlspecialchars($_GET['deleteMessage']);
@@ -30,11 +38,18 @@ class ClassificationController extends AbstractController
             "Classification"
         );
 
+        $classifications = $paginator->paginate(
+            $data,
+            $searchClassificationData->page,
+            50
+        );
+
         return $this->render('classification/index.html.twig', [
             'classificationColumns' => $classificationColumns,
-            'classifications' => $allClassifications,
-            'length' => count($allClassifications),
-            'deleteMessage' => $deleteMessage
+            'classifications' => $classifications,
+            'length' => $classifications->getTotalItemCount(),
+            'deleteMessage' => $deleteMessage,
+            'searchClassificationForm' => $form->createView(),
         ]);
     }
 

@@ -10,17 +10,24 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use App\Repository\ArtworkRepository;
 use App\Entity\Artwork;
+use Knp\Component\Pager\PaginatorInterface;
 use App\Form\ArtworkType;
+use App\Form\SearchArtworkType;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Data\SearchData;
 
 class ArtworkController extends AbstractController
 {
     /**
      * @Route("/artwork", name="all_artwork")
      */
-    public function index(ArtworkRepository $artworkRepository, string $deleteMessage = null): Response
+    public function index(ArtworkRepository $artworkRepository, string $deleteMessage = null,Request $request, PaginatorInterface $paginator): Response
     {
-        $allArtwork = $artworkRepository->findAll();
+        $searchArtworkData = new SearchData();
+        $searchArtworkData->page = $request->get('page', 1);
+        $form = $this->createForm(SearchArtworkType::class, $searchArtworkData);
+        $form->handleRequest($request);
+        $data = $artworkRepository->findSearch($searchArtworkData);
 
         if (isset($_GET['deleteMessage']) && !empty($_GET['deleteMessage'])) {
             $deleteMessage = htmlspecialchars($_GET['deleteMessage']);
@@ -34,11 +41,18 @@ class ArtworkController extends AbstractController
             "Medium"
         );
 
+        $artworks = $paginator->paginate(
+            $data,
+            $searchArtworkData->page,
+            50
+        );
+
         return $this->render('artwork/index.html.twig', [
-            'artworks' => $allArtwork,
-            'length' => count($allArtwork),
+            'artworks' => $artworks,
+            'length' =>$artworks->getTotalItemCount(),
             'deleteMessage' => $deleteMessage,
             'artworkColumns' => $artworkColumns,
+            'searchArtworkForm' => $form->createView(),
         ]);
     }
 

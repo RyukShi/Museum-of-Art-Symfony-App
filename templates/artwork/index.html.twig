@@ -14,7 +14,20 @@
         </div>
     {% endif %}
 
-    <table class="table table-primary">
+    {{ form_start(searchArtworkForm) }}
+        <div style="display: flex; justify-content: space-evenly;">
+            {{ form_row(searchArtworkForm.number) }}
+            {{ form_row(searchArtworkForm.name) }}
+            {{ form_row(searchArtworkForm.title) }}
+            {{ form_row(searchArtworkForm.dimensions) }}
+        </div>
+        {{ form_row(searchArtworkForm.medium) }}
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Search !</button>
+        </div>
+    {{ form_end(searchArtworkForm) }}
+
+    <table class="table table-primary mt-4">
         <thead>
             <tr>
                 <th scope="col"># id</th>
@@ -40,5 +53,8 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+<div class="container-fluid mt-4" style="display: flex; justify-content: center;">
+    {{ knp_pagination_render(artworks, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
 </div>
 {% endblock %}

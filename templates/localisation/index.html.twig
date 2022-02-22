@@ -15,7 +15,32 @@
             </div>
         {% endif %}
 
-    <table class="table table-primary">
+    {{ form_start(searchLocalisationForm) }}
+        <div style="display: flex; justify-content: space-evenly;">
+            {{ form_row(searchLocalisationForm.culture) }}
+            {{ form_row(searchLocalisationForm.period) }}
+            {{ form_row(searchLocalisationForm.dynasty) }}
+            {{ form_row(searchLocalisationForm.reign) }}
+        </div>
+        <div style="display: flex; justify-content: space-evenly;">
+            {{ form_row(searchLocalisationForm.region) }}
+            {{ form_row(searchLocalisationForm.subregion) }}
+            {{ form_row(searchLocalisationForm.country) }}
+            {{ form_row(searchLocalisationForm.county) }}
+        </div>
+        <div style="display: flex; justify-content: space-evenly;">
+            {{ form_row(searchLocalisationForm.city) }}
+            {{ form_row(searchLocalisationForm.locale) }}
+            {{ form_row(searchLocalisationForm.locus) }}
+            {{ form_row(searchLocalisationForm.river) }}
+        </div>
+        {{ form_row(searchLocalisationForm.excavation) }}
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Search !</button>
+        </div>
+    {{ form_end(searchLocalisationForm) }}
+
+    <table class="table table-primary mt-4">
         <thead>
             <tr>
                 <th scope="col"># id</th>
@@ -49,5 +74,8 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
+    <div class="container-fluid mt-4" style="display: flex; justify-content: center;">
+        {{ knp_pagination_render(localisations, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
     </div>
 {% endblock %}

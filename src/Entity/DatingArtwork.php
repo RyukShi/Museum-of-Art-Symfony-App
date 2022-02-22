@@ -20,6 +20,7 @@ class DatingArtwork
     private int $id;
 
     /**
+     * supprimer
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private string $object_date;

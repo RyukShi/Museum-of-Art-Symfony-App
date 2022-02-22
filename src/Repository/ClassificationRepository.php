@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Classification;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Data\SearchData;
 
 /**
  * @method Classification|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,27 @@ class ClassificationRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Classification::class);
+    }
+
+    /**
+     * Retrieves artists related to a search
+     * @param SearchData $search
+     */
+    public function findSearch(SearchData $search)
+    {
+        $query = $this
+            ->createQueryBuilder('c')
+            ->select('c');
+
+        if (!empty($search->classification)) {
+            $query
+                ->andWhere('c.classification LIKE :classification')
+                ->setParameter('classification', "%{$search->classification}%");
+        }
+
+        $query->orderBy('c.classification', 'ASC');
+
+        return ($query->getQuery())->getResult();
     }
 
     // /**

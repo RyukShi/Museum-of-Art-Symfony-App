@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Artwork;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Data\SearchData;
 
 /**
  * @method Artwork|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,51 @@ class ArtworkRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Artwork::class);
+    }
+
+    /**
+     * Retrieves artists related to a search
+     * @param SearchData $search
+     */
+    public function findSearch(SearchData $search)
+    {
+        $query = $this
+            ->createQueryBuilder('a')
+            ->select('a');
+
+        if (!empty($search->number)) {
+            $query
+                ->andWhere('a.number LIKE :number')
+                ->setParameter('number', "%{$search->number}%");
+        }
+
+        if (!empty($search->name)) {
+            $query
+                ->andWhere('a.name LIKE :name')
+                ->setParameter('name', "%{$search->name}%");
+        }
+
+        if (!empty($search->title)) {
+            $query
+                ->andWhere('a.title LIKE :title')
+                ->setParameter('title', "%{$search->title}%");
+        }
+
+        if (!empty($search->dimensions)) {
+            $query
+                ->andWhere('a.dimensions LIKE :dimensions')
+                ->setParameter('dimensions', "%{$search->dimensions}%");
+        }
+
+        if (!empty($search->medium)) {
+            $query
+                ->andWhere('a.medium LIKE :medium')
+                ->setParameter('medium', "%{$search->medium}%");
+        }
+
+        $query->orderBy('a.title', 'ASC');
+
+        return ($query->getQuery())->getResult();
     }
 
     // /**

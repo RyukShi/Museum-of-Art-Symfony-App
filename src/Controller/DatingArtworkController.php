@@ -12,15 +12,23 @@ use App\Form\DatingArtworkType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\DatingArtworkRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use App\Data\SearchData;
+use App\Form\SearchDatingType;
 
 class DatingArtworkController extends AbstractController
 {
     /**
      * @Route("/dating", name="all_dating_artwork")
      */
-    public function index(DatingArtworkRepository $repository, string $deleteMessage = null): Response
+    public function index(DatingArtworkRepository $repository, string $deleteMessage = null,
+    Request $request, PaginatorInterface $paginator): Response
     {
-        $allDatting = $repository->findAll();
+        $searchDatingData = new SearchData();
+        $searchDatingData->page = $request->get('page', 1);
+        $form = $this->createForm(SearchDatingType::class, $searchDatingData);
+        $form->handleRequest($request);
+        $data = $repository->findSearch($searchDatingData);
 
         $datingColumns = array(
             "Object Date",
@@ -28,15 +36,22 @@ class DatingArtworkController extends AbstractController
             "Object End Date",
         );
 
+        $dainings = $paginator->paginate(
+            $data,
+            $searchDatingData->page,
+            50
+        );
+
         if (isset($_GET['deleteMessage']) && !empty($_GET['deleteMessage'])) {
             $deleteMessage =  htmlspecialchars($_GET['deleteMessage']);
         }
 
         return $this->render('dating_artwork/index.html.twig', [
-            'datings' => $allDatting,
-            'length' => count($allDatting),
+            'datings' => $dainings,
+            'length' => $dainings->getTotalItemCount(),
             'deleteMessage' => $deleteMessage,
             'datingColumns' => $datingColumns,
+            'searchDatingForm' => $form->createView(),
         ]);
     }
 

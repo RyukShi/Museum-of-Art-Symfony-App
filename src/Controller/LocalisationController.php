@@ -10,17 +10,28 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use App\Repository\LocalisationRepository;
 use App\Form\LocalisationType;
+use App\Form\SearchLocalisationType;
 use App\Entity\Localisation;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use App\Data\SearchData;
 
 class LocalisationController extends AbstractController
 {
     /**
      * @Route("/localisation", name="all_localisation")
      */
-    public function index(LocalisationRepository $repository, string $deleteMessage = null): Response
-    {
-        $allLocalisation = $repository->findAll();
+    public function index(
+        LocalisationRepository $repository,
+        string $deleteMessage = null,
+        Request $request,
+        PaginatorInterface $paginator
+    ): Response {
+        $searchClassificationData = new SearchData();
+        $searchClassificationData->page = $request->get('page', 1);
+        $form = $this->createForm(SearchLocalisationType::class, $searchClassificationData);
+        $form->handleRequest($request);
+        $data = $repository->findSearch($searchClassificationData);
 
         $localisationColumns = array(
             "Culture",
@@ -38,15 +49,22 @@ class LocalisationController extends AbstractController
             "Excavation"
         );
 
+        $localisations = $paginator->paginate(
+            $data,
+            $searchClassificationData->page,
+            50
+        );
+
         if (isset($_GET['deleteMessage']) && !empty($_GET['deleteMessage'])) {
             $deleteMessage =  htmlspecialchars($_GET['deleteMessage']);
         }
 
         return $this->render('localisation/index.html.twig', [
-            'localisations' => $allLocalisation,
-            'length' => count($allLocalisation),
+            'localisations' => $localisations,
+            'length' => $localisations->getTotalItemCount(),
             'deleteMessage' => $deleteMessage,
             'localisationColumns' => $localisationColumns,
+            'searchLocalisationForm' => $form->createView(),
         ]);
     }
 

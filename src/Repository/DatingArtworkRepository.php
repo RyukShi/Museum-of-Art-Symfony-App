@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\DatingArtwork;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Data\SearchData;
 
 /**
  * @method DatingArtwork|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,39 @@ class DatingArtworkRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, DatingArtwork::class);
+    }
+
+    /**
+     * Retrieves artists related to a search
+     * @param SearchData $search
+     */
+    public function findSearch(SearchData $search)
+    {
+        $query = $this
+            ->createQueryBuilder('d')
+            ->select('d');
+
+        if (!empty($search->object_date)) {
+            $query
+                ->andWhere('d.object_date LIKE :object_date')
+                ->setParameter('object_date', "%{$search->object_date}%");
+        }
+
+        if (!empty($search->object_begin_date)) {
+            $query
+                ->andWhere('d.object_begin_date >= :object_begin_date')
+                ->setParameter('object_begin_date', $search->object_begin_date);
+        }
+
+        if (!empty($search->object_end_date)) {
+            $query
+                ->andWhere('d.object_end_date <= :object_end_date')
+                ->setParameter('object_end_date', $search->object_end_date);
+        }
+
+        $query->orderBy('d.object_date', 'ASC');
+
+        return ($query->getQuery())->getResult();
     }
 
     // /**

@@ -10,17 +10,24 @@ use App\Repository\ArtistRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Artist;
 use App\Form\ArtistType;
+use App\Data\SearchData;
+use App\Form\SearchArtistType;
 
 class ArtistController extends AbstractController
 {
     /**
      * @Route("/artist", name="all_artist")
      */
-    public function index(ArtistRepository $repository, string $deleteMessage = null): Response
+    public function index(ArtistRepository $repository, string $deleteMessage = null, Request $request, PaginatorInterface $paginator): Response
     {
-        $allArtist = $repository->findAll();
+        $searchArtistData = new SearchData();
+        $searchArtistData->page = $request->get('page', 1);
+        $form = $this->createForm(SearchArtistType::class, $searchArtistData);
+        $form->handleRequest($request);
+        $data = $repository->findSearch($searchArtistData);
 
         if (isset($_GET['deleteMessage']) && !empty($_GET['deleteMessage'])) {
             $deleteMessage = htmlspecialchars($_GET['deleteMessage']);
@@ -34,9 +41,16 @@ class ArtistController extends AbstractController
             "Nationality",
         );
 
+        $artists = $paginator->paginate(
+            $data,
+            $searchArtistData->page,
+            50
+        );
+
         return $this->render('artist/index.html.twig', [
-            'artists' => $allArtist,
-            'length' => count($allArtist),
+            'artists' => $artists,
+            'searchArtistForm' => $form->createView(),
+            'length' => $artists->getTotalItemCount(),
             'artistColumns' => $artistColumns,
             'deleteMessage' => $deleteMessage,
         ]);
