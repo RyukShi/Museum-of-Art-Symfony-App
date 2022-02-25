@@ -24,7 +24,6 @@ class SearchData
     public string $classification;
 
     // DatingArtwork
-    public string $object_date;
     public int $object_begin_date;
     public int $object_end_date;
 

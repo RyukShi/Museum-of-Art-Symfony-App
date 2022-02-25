@@ -16,8 +16,7 @@
     {% endif %}
 
     {{ form_start(searchDatingForm) }}
-        <div style="display: flex; justify-content: space-evenly;">
-            {{ form_row(searchDatingForm.object_date) }}
+        <div style="display: flex; justify-content: space-evenly; flex-wrap: wrap;">
             {{ form_row(searchDatingForm.object_begin_date) }}
             {{ form_row(searchDatingForm.object_end_date) }}
         </div>
@@ -41,7 +40,6 @@
             {% for dating in datings %}
                 <tr>
                     <th scope="row">{{ dating.id }}</th>
-                    <td>{{ dating.getObjectDate }}</td>
                     <td>{{ dating.getObjectBeginDate }}</td>
                     <td>{{ dating.getObjectEndDate }}</td>
                     <td><a class="btn btn-primary" href="{{ path('one_dating_artwork', {'id': dating.id}) }}" role="button">Show</a></td>

@@ -15,6 +15,8 @@
         
         {% if classification is not empty %}
             <p>{{ classification }}</p>
+
+            <a class="btn btn-success" href="{{ path('edit_classification', {'id': classification.id}) }}" role="button">Edit this classification</a>
         {% endif %}
     </div>
 {% endblock %}

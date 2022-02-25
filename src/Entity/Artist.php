@@ -14,38 +14,38 @@ class Artist
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=5000, nullable=true)
      */
-    private string $display_name;
+    private ?string $display_name = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=5000, nullable=true)
      */
-    private string $begin_date;
+    private ?string $begin_date = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=5000, nullable=true)
      */
-    private string $end_date;
+    private ?string $end_date = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=5000, nullable=true)
      */
-    private string $gender;
+    private ?string $gender = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=5000, nullable=true)
      */
-    private string $nationality;
+    private ?string $nationality = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Artwork::class, mappedBy="Artist")
+     * @ORM\OneToMany(targetEntity=Artwork::class, mappedBy="artist")
      */
     private $artworks;
 
@@ -131,11 +131,11 @@ class Artist
 
     public function __toString(): string
     {
-        return "name : " . $this->display_name . " nationality : " . $this->nationality;
+        return "name : " . $this->display_name . ", nationality : " . $this->nationality . ", gender : " . $this->gender;
     }
 
     /**
-     * @return Collection|Artwork[]
+     * @return Collection<int, Artwork>
      */
     public function getArtworks(): Collection
     {
@@ -146,7 +146,7 @@ class Artist
     {
         if (!$this->artworks->contains($artwork)) {
             $this->artworks[] = $artwork;
-            $artwork->addArtist($this);
+            $artwork->setArtist($this);
         }
 
         return $this;
@@ -155,7 +155,10 @@ class Artist
     public function removeArtwork(Artwork $artwork): self
     {
         if ($this->artworks->removeElement($artwork)) {
-            $artwork->removeArtist($this);
+            // set the owning side to null (unless already changed)
+            if ($artwork->getArtist() === $this) {
+                $artwork->setArtist(null);
+            }
         }
 
         return $this;

@@ -21,8 +21,12 @@ class ArtistController extends AbstractController
     /**
      * @Route("/artist", name="all_artist")
      */
-    public function index(ArtistRepository $repository, string $deleteMessage = null, Request $request, PaginatorInterface $paginator): Response
-    {
+    public function index(
+        ArtistRepository $repository,
+        string $deleteMessage = null,
+        Request $request,
+        PaginatorInterface $paginator
+    ): Response {
         $searchArtistData = new SearchData();
         $searchArtistData->page = $request->get('page', 1);
         $form = $this->createForm(SearchArtistType::class, $searchArtistData);
@@ -122,6 +126,39 @@ class ArtistController extends AbstractController
             $deleteMessage = "Artist deleted successfully.";
 
             return $this->redirectToRoute('all_artist', ['deleteMessage' => $deleteMessage]);
+        }
+
+        return $this->redirectToRoute('all_artist');
+    }
+
+    /**
+     * @Route("/artist/edit/{id}", name="edit_artist", requirements={"id"= "[1-9]\d*"})
+     */
+    public function editArtist(int $id, ManagerRegistry $doctrine, Request $request)
+    {
+
+        $artist = $doctrine->getRepository(Artist::class)->find($id);
+
+        if ($artist) {
+
+            $form = $this->createForm(ArtistType::class, $artist);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $artist = $form->getData();
+
+                $entityManager = $doctrine->getManager();
+                $entityManager->flush();
+                $successMessage = "Artist changed successfully!";
+
+                return $this->redirectToRoute('one_artist', [
+                    'id' => $artist->getId(),
+                    'successMessage' => $successMessage
+                ]);
+            }
+            return $this->render('artist/edit_form.html.twig', [
+                'artistEditForm' => $form->createView(),
+            ]);
         }
 
         return $this->redirectToRoute('all_artist');

@@ -12,7 +12,6 @@ class DatingArtworkType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('object_date')
             ->add('object_begin_date')
             ->add('object_end_date')
         ;

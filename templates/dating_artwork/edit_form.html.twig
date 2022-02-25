@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Dating{% endblock %}
+
+{% block body %}
+    <div class="mt-3 container" style="background-color: #E5F1FF;">
+        <h4>Edit Dating Form</h4>
+        {{ form_start(datingEditForm) }}
+            {% if form_errors(datingEditForm) is not empty %}
+                {{ form_errors(datingEditForm) }}
+            {% endif %}
+            {{ form_row(datingEditForm.object_begin_date) }}
+            {{ form_row(datingEditForm.object_end_date) }}
+            <div class="mt-3" style="display: flex; justify-content: space-evenly; flex-wrap: wrap;">
+                <button type="submit" class="btn btn-primary">Modify dating !</button>
+                <a class="btn btn-danger" role="button" href="{{ path('all_dating_artwork') }}">Cancel</a>
+            </div>
+        {{ form_end(datingEditForm) }}
+    </div>
+{% endblock %}

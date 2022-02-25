@@ -14,7 +14,7 @@ class Artwork
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
     private int $id;
@@ -22,7 +22,7 @@ class Artwork
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $number;
+    private ?string $number = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -32,17 +32,17 @@ class Artwork
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $title;
+    private ?string $title = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $dimensions;
+    private ?string $dimensions = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $medium;
+    private ?string $medium = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Classification::class, inversedBy="artworks")
@@ -55,9 +55,14 @@ class Artwork
     private $dating_artwork;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Artist::class, inversedBy="artworks")
+     * @ORM\ManyToOne(targetEntity=Artist::class, inversedBy="artworks")
      */
-    private $Artist;
+    private $artist;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Localisation::class, inversedBy="artworks")
+     */
+    private $localisation;
 
     public function __construct(
         string $number = "",
@@ -71,7 +76,6 @@ class Artwork
         $this->title = $title;
         $this->dimensions = $dimensions;
         $this->medium = $medium;
-        $this->Artist = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,7 +145,7 @@ class Artwork
 
     public function __toString(): string
     {
-        return "id : " . $this->id . " name : " . $this->name;
+        return "number : " . $this->number . " name : " . $this->name . " title : " . $this->title;
     }
 
     public function getClassification(): ?Classification
@@ -168,26 +172,26 @@ class Artwork
         return $this;
     }
 
-    /**
-     * @return Collection|Artist[]
-     */
-    public function getArtist(): Collection
+    public function getArtist(): ?Artist
     {
-        return $this->Artist;
+        return $this->artist;
     }
 
-    public function addArtist(Artist $artist): self
+    public function setArtist(?Artist $artist): self
     {
-        if (!$this->Artist->contains($artist)) {
-            $this->Artist[] = $artist;
-        }
+        $this->artist = $artist;
 
         return $this;
     }
 
-    public function removeArtist(Artist $artist): self
+    public function getLocalisation(): ?Localisation
     {
-        $this->Artist->removeElement($artist);
+        return $this->localisation;
+    }
+
+    public function setLocalisation(?Localisation $localisation): self
+    {
+        $this->localisation = $localisation;
 
         return $this;
     }

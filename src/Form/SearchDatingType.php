@@ -15,13 +15,6 @@ class SearchDatingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('object_date', TextType::class, [
-                'label' => false,
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Object Date',
-                ]
-            ])
             ->add('object_begin_date', IntegerType::class, [
                 'label' => false,
                 'required' => false,

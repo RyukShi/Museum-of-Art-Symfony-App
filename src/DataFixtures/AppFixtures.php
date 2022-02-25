@@ -74,9 +74,9 @@ class AppFixtures extends Fixture
         // filter entities in order to load them separately
         $loadArwork = false;
         $loadArtist = false;
-        $loadClassification = false;
+        $loadClassification = true;
         $loadDatingArtwork = false;
-        $loadLocalisation = true;
+        $loadLocalisation = false;
 
         // reader file
         $stream = fopen('C:/Users/Public/Documents/MetObjects.csv', 'r');
@@ -85,8 +85,8 @@ class AppFixtures extends Fixture
         $csv->setHeaderOffset(0);
 
         $stmt = Statement::create()
-            ->offset(0)
-            ->limit(5000);
+            ->offset(15000)
+            ->limit(15000);
 
         $records = $stmt->process($csv);
 
@@ -140,9 +140,8 @@ class AppFixtures extends Fixture
 
             if ($loadDatingArtwork) {
                 // DatingArtwork Fixtures
-                if ($record["Object Date"] != null && $record["Object Begin Date"] != null && $record["Object End Date"] != null) {
+                if ($record["Object Begin Date"] != null && $record["Object End Date"] != null) {
                     $datingArtwork = new DatingArtwork(
-                        $record["Object Date"],
                         $record["Object Begin Date"],
                         $record["Object End Date"]
                     );

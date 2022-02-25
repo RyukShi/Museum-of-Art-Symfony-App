@@ -14,26 +14,20 @@ class DatingArtwork
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
     private int $id;
 
     /**
-     * supprimer
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private string $object_date;
+    private ?int $object_begin_date = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private int $object_begin_date;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private int $object_end_date;
+    private ?int $object_end_date = null;
 
     /**
      * @ORM\OneToMany(targetEntity=Artwork::class, mappedBy="dating_artwork")
@@ -41,11 +35,9 @@ class DatingArtwork
     private $artworks;
 
     public function __construct(
-        string $object_date = "",
         int $object_begin_date = 0,
         int $object_end_date = 0
     ) {
-        $this->object_date = $object_date;
         $this->object_begin_date = $object_begin_date;
         $this->object_end_date = $object_end_date;
         $this->artworks = new ArrayCollection();
@@ -54,18 +46,6 @@ class DatingArtwork
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getObjectDate(): ?string
-    {
-        return $this->object_date;
-    }
-
-    public function setObjectDate(?string $object_date): self
-    {
-        $this->object_date = $object_date;
-
-        return $this;
     }
 
     public function getObjectBeginDate(): ?int
@@ -94,7 +74,7 @@ class DatingArtwork
 
     public function __toString(): string
     {
-        return "object_date : " . $this->object_date;
+        return "object_begin_date : " . $this->object_begin_date . " object_end_date : " . $this->object_end_date;
     }
 
     /**

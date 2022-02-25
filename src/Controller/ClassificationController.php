@@ -21,9 +21,12 @@ class ClassificationController extends AbstractController
     /**
      * @Route("/classification", name="all_classification")
      */
-    public function index(ClassificationRepository $repository, string $deleteMessage = null,
-    Request $request, PaginatorInterface $paginator): Response
-    {
+    public function index(
+        ClassificationRepository $repository,
+        string $deleteMessage = null,
+        Request $request,
+        PaginatorInterface $paginator
+    ): Response {
         $searchClassificationData = new SearchData();
         $searchClassificationData->page = $request->get('page', 1);
         $form = $this->createForm(SearchClassificationType::class, $searchClassificationData);
@@ -78,7 +81,7 @@ class ClassificationController extends AbstractController
     /**
      * @Route("/classification/add", name="add_classification")
      */
-    public function addClassification(ManagerRegistry $doctrine, Request $request): Response
+    public function createClassification(ManagerRegistry $doctrine, Request $request): Response
     {
         $classification = new Classification();
 
@@ -120,6 +123,39 @@ class ClassificationController extends AbstractController
 
             return $this->redirectToRoute('all_classification', ['deleteMessage' => $deleteMessage]);
         }
+        return $this->redirectToRoute('all_classification');
+    }
+
+    /**
+     * @Route("/classification/edit/{id}", name="edit_classification", requirements={"id"= "[1-9]\d*"})
+     */
+    public function editClassification(int $id, ManagerRegistry $doctrine, Request $request)
+    {
+
+        $classification = $doctrine->getRepository(Classification::class)->find($id);
+
+        if ($classification) {
+
+            $form = $this->createForm(ClassificationType::class, $classification);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $classification = $form->getData();
+
+                $entityManager = $doctrine->getManager();
+                $entityManager->flush();
+                $successMessage = "Classification changed successfully!";
+
+                return $this->redirectToRoute('one_classification', [
+                    'id' => $classification->getId(),
+                    'successMessage' => $successMessage
+                ]);
+            }
+            return $this->render('classification/edit_form.html.twig', [
+                'classificationEditForm' => $form->createView(),
+            ]);
+        }
+
         return $this->redirectToRoute('all_classification');
     }
 }

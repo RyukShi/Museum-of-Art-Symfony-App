@@ -14,15 +14,15 @@ class Classification
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $classification;
+    private ?string $classification = null;
 
     /**
      * @ORM\OneToMany(targetEntity=Artwork::class, mappedBy="classification")

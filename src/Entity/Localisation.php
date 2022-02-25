@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LocalisationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +14,7 @@ class Localisation
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
     private int $id;
@@ -20,67 +22,72 @@ class Localisation
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $culture;
+    private ?string $culture = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $period;
+    private ?string $period = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $dynasty;
+    private ?string $dynasty = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $reign;
+    private ?string $reign = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $region;
+    private ?string $region = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $subregion;
+    private ?string $subregion = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $country;
+    private ?string $country = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $county;
+    private ?string $county = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $city;
+    private ?string $city = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $locale;
+    private ?string $locale = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $locus;
+    private ?string $locus = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $river;
+    private ?string $river = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $excavation;
+    private ?string $excavation = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Artwork::class, mappedBy="localisation")
+     */
+    private $artworks;
 
     public function __construct(
         string $culture = "",
@@ -110,6 +117,7 @@ class Localisation
         $this->locus = $locus;
         $this->river = $river;
         $this->excavation = $excavation;
+        $this->artworks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -275,6 +283,36 @@ class Localisation
 
     public function __toString(): string
     {
-        return "country : " . $this->country . " city : " . $this->city . " region : " . $this->region;
+        return "country : " . $this->country . ", city : " . $this->city . ", region : " . $this->region . ", subregion : " . $this->subregion;
+    }
+
+    /**
+     * @return Collection<int, Artwork>
+     */
+    public function getArtworks(): Collection
+    {
+        return $this->artworks;
+    }
+
+    public function addArtwork(Artwork $artwork): self
+    {
+        if (!$this->artworks->contains($artwork)) {
+            $this->artworks[] = $artwork;
+            $artwork->setLocalisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArtwork(Artwork $artwork): self
+    {
+        if ($this->artworks->removeElement($artwork)) {
+            // set the owning side to null (unless already changed)
+            if ($artwork->getLocalisation() === $this) {
+                $artwork->setLocalisation(null);
+            }
+        }
+
+        return $this;
     }
 }

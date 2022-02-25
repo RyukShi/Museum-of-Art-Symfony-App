@@ -30,12 +30,6 @@ class DatingArtworkRepository extends ServiceEntityRepository
             ->createQueryBuilder('d')
             ->select('d');
 
-        if (!empty($search->object_date)) {
-            $query
-                ->andWhere('d.object_date LIKE :object_date')
-                ->setParameter('object_date', "%{$search->object_date}%");
-        }
-
         if (!empty($search->object_begin_date)) {
             $query
                 ->andWhere('d.object_begin_date >= :object_begin_date')
@@ -48,7 +42,7 @@ class DatingArtworkRepository extends ServiceEntityRepository
                 ->setParameter('object_end_date', $search->object_end_date);
         }
 
-        $query->orderBy('d.object_date', 'ASC');
+        $query->orderBy('d.object_begin_date', 'ASC');
 
         return ($query->getQuery())->getResult();
     }

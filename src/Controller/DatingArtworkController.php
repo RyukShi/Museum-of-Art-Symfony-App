@@ -21,9 +21,12 @@ class DatingArtworkController extends AbstractController
     /**
      * @Route("/dating", name="all_dating_artwork")
      */
-    public function index(DatingArtworkRepository $repository, string $deleteMessage = null,
-    Request $request, PaginatorInterface $paginator): Response
-    {
+    public function index(
+        DatingArtworkRepository $repository,
+        string $deleteMessage = null,
+        Request $request,
+        PaginatorInterface $paginator
+    ): Response {
         $searchDatingData = new SearchData();
         $searchDatingData->page = $request->get('page', 1);
         $form = $this->createForm(SearchDatingType::class, $searchDatingData);
@@ -31,7 +34,6 @@ class DatingArtworkController extends AbstractController
         $data = $repository->findSearch($searchDatingData);
 
         $datingColumns = array(
-            "Object Date",
             "Object Begin Date",
             "Object End Date",
         );
@@ -123,6 +125,38 @@ class DatingArtworkController extends AbstractController
             return $this->redirectToRoute('all_dating_artwork', ['deleteMessage' => $deleteMessage]);
         }
         return $this->redirectToRoute('all_dating_artwork');
+    }
 
+    /**
+     * @Route("/dating/edit/{id}", name="edit_dating_artwork", requirements={"id"= "[1-9]\d*"})
+     */
+    public function editDating(int $id, ManagerRegistry $doctrine, Request $request)
+    {
+
+        $dating = $doctrine->getRepository(DatingArtwork::class)->find($id);
+
+        if ($dating) {
+
+            $form = $this->createForm(DatingArtworkType::class, $dating);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $dating = $form->getData();
+
+                $entityManager = $doctrine->getManager();
+                $entityManager->flush();
+                $successMessage = "Dating changed successfully!";
+
+                return $this->redirectToRoute('one_dating_artwork', [
+                    'id' => $dating->getId(),
+                    'successMessage' => $successMessage
+                ]);
+            }
+            return $this->render('dating_artwork/edit_form.html.twig', [
+                'datingEditForm' => $form->createView(),
+            ]);
+        }
+
+        return $this->redirectToRoute('all_dating_artwork');
     }
 }

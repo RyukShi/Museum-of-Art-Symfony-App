@@ -15,6 +15,8 @@
         
         {% if localisation is not empty %}
             <p>{{ localisation }}</p>
+
+            <a class="btn btn-success" href="{{ path('edit_localisation', {'id': localisation.id}) }}" role="button">Edit this localisation</a>
         {% endif %}
     </div>
 {% endblock %}

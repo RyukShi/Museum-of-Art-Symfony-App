@@ -17,6 +17,8 @@
             <h4>{{ artist.displayName }}</h4>
             <p>{{ artist.displayName }} is of {{ artist.nationality }} nationality</p>
 
+            <a class="btn btn-success" href="{{ path('edit_artist', {'id': artist.id}) }}" role="button">Edit this artist</a>
+
             {% if artist.artworks is not empty %}
                 <ul>
                     {% for artwork in artist.artworks %}

@@ -123,7 +123,7 @@ class LocalisationController extends AbstractController
     /**
      * @Route("/localisation/remove/{id}", name="remove_localisation", requirements={"id"= "[1-9]\d*"})
      */
-    public function removeArtwork(ManagerRegistry $doctrine, int $id): RedirectResponse
+    public function removeLocalisation(ManagerRegistry $doctrine, int $id): RedirectResponse
     {
         $localisation = $doctrine->getRepository(Localisation::class)->find($id);
 
@@ -135,6 +135,39 @@ class LocalisationController extends AbstractController
 
             return $this->redirectToRoute('all_localisation', ['deleteMessage' => $deleteMessage]);
         }
+        return $this->redirectToRoute('all_localisation');
+    }
+
+    /**
+     * @Route("/localisation/edit/{id}", name="edit_localisation", requirements={"id"= "[1-9]\d*"})
+     */
+    public function editLocalisation(int $id, ManagerRegistry $doctrine, Request $request)
+    {
+
+        $localisation = $doctrine->getRepository(Localisation::class)->find($id);
+
+        if ($localisation) {
+
+            $form = $this->createForm(LocalisationType::class, $localisation);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $localisation = $form->getData();
+
+                $entityManager = $doctrine->getManager();
+                $entityManager->flush();
+                $successMessage = "Localisation changed successfully!";
+
+                return $this->redirectToRoute('one_localisation', [
+                    'id' => $localisation->getId(),
+                    'successMessage' => $successMessage
+                ]);
+            }
+            return $this->render('localisation/edit_form.html.twig', [
+                'localisationEditForm' => $form->createView(),
+            ]);
+        }
+
         return $this->redirectToRoute('all_localisation');
     }
 }
