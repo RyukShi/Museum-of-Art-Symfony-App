@@ -4,7 +4,10 @@
 
 {% block body %}
 <div class="container">
-    <h4>{{ length }} artwork(s) found</h4>
+    <h4 class="mb-4" style="text-align: center;">{{ length }} artwork(s) found</h4>
+
+    <h6>Filter artwork form : </h6>
+    <p>You can search by filtering certain fields such as the <strong>name</strong> of a artwork or the <strong>title</strong> for example.</p>
     {% if deleteMessage is not empty %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ deleteMessage }}
@@ -21,6 +24,8 @@
             {{ form_row(searchArtworkForm.title) }}
             {{ form_row(searchArtworkForm.dimensions) }}
             {{ form_row(searchArtworkForm.medium) }}
+            {{ form_row(searchArtworkForm.offset) }}
+            {{ form_row(searchArtworkForm.limit) }}
         </div>
         <div class="mt-3">
             <button type="submit" class="btn btn-primary">Search !</button>

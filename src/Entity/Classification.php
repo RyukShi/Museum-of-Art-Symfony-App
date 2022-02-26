@@ -54,7 +54,7 @@ class Classification
 
     public function __toString(): string
     {
-        return "classification : " . $this->classification;
+        return $this->classification . " classification";
     }
 
     /**

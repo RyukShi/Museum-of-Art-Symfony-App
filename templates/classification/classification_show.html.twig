@@ -14,9 +14,31 @@
         {% endif %}
         
         {% if classification is not empty %}
-            <p>{{ classification }}</p>
+            <H4>{{ classification }}</h4>
 
             <a class="btn btn-success" href="{{ path('edit_classification', {'id': classification.id}) }}" role="button">Edit this classification</a>
+            <a class="btn btn-danger" href="{{ path('remove_classification', {'id': classification.id}) }}" role="button">Delete</a>
+        {% endif %}
+
+        {% if classification.artworks is not empty %}
+            <h6 class="mt-4">{{ length }} artwork(s) in {{ classification }}</h6>
+            <div class="container mt-4" style="display: flex; justify-content: space-evenly; flex-wrap: wrap;">
+                {% for artwork in classification.artworks %}
+                    <div class="card mb-4 border-success" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ artwork.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ artwork.name }}</h6>
+                            <p class="card-text">dimensions : {{ artwork.dimensions }}</p>
+                            <p class="card-text">medium : {{ artwork.medium }}</p>
+                            <p class="card-text">{{ artwork.classification }}</p>
+                            <a href="{{ path('one_artwork', {'id': artwork.id}) }}" class="btn btn-success card-link" role="button">Show this artwork</a>
+                            <a href="{{ path('remove_artwork', {'id': artwork.id}) }}" class="btn btn-danger card-link" role="button">Delete</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Not artworks to display for this classification.</p>
         {% endif %}
     </div>
 {% endblock %}

@@ -14,9 +14,49 @@
         {% endif %}
         
         {% if localisation is not empty %}
-            <p>{{ localisation }}</p>
+            <h4>Localisation show</h4>
 
-            <a class="btn btn-success" href="{{ path('edit_localisation', {'id': localisation.id}) }}" role="button">Edit this localisation</a>
+            <div class="card mb-4 border-primary" style="width: 20rem;">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"><strong>Culture</strong> : {{ localisation.culture }}</p>
+                    <p class="card-text"><strong>Period</strong> : {{ localisation.period }}</p>
+                    <p class="card-text"><strong>Dynasty</strong> : {{ localisation.dynasty }}</p>
+                    <p class="card-text"><strong>Reing</strong> : {{ localisation.reign }}</p>
+                    <p class="card-text"><strong>Region</strong> : {{ localisation.region }}</p>
+                    <p class="card-text"><strong>Subregion</strong> : {{ localisation.subregion }}<p>
+                    <p class="card-text"><strong>Country</strong> : {{ localisation.country }}<p>
+                    <p class="card-text"><strong>County</strong> : {{ localisation.county }}<p>
+                    <p class="card-text"><strong>City</strong> : {{ localisation.city }}<p>
+                    <p class="card-text"><strong>Locale</strong> : {{ localisation.locale }}<p>
+                    <p class="card-text"><strong>Locus</strong> : {{ localisation.locus }}<p>
+                    <p class="card-text"><strong>River</strong> : {{ localisation.river }}<p>
+                    <p class="card-text"><strong>Excavation</strong> : {{ localisation.excavation }}<p>
+                    <a class="btn btn-success" href="{{ path('edit_localisation', {'id': localisation.id}) }}" role="button">Edit this localisation</a>
+                    <a class="btn btn-danger" href="{{ path('remove_localisation', {'id': localisation.id}) }}" role="button">Delete</a>
+                </div>
+            </div>
+
+            {% if localisation.artworks is not empty %}
+                <h6 class="mt-4">Localisation(s) : {{ length }} localisation(s)</h6>
+                <div class="container mt-4" style="display: flex; justify-content: space-evenly; flex-wrap: wrap;">
+                    {% for artwork in localisation.artworks %}
+                        <div class="card mb-4 border-success" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ artwork.title }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ artwork.name }}</h6>
+                                <p class="card-text">dimensions : {{ artwork.dimensions }}</p>
+                                <p class="card-text">medium : {{ artwork.medium }}</p>
+                                <p class="card-text">{{ artwork.classification }}</p>
+                                <a href="{{ path('one_artwork', {'id': artwork.id}) }}" class="btn btn-success card-link" role="button">Show this artwork</a>
+                                <a href="{{ path('remove_artwork', {'id': artwork.id}) }}" class="btn btn-danger card-link" role="button">Delete</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Not artworks to display for this localisation.</p>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

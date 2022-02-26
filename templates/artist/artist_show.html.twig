@@ -14,19 +14,36 @@
         {% endif %}
         
         {% if artist is not empty %}
-            <h4>{{ artist.displayName }}</h4>
-            <p>{{ artist.displayName }} is of {{ artist.nationality }} nationality</p>
 
-            <a class="btn btn-success" href="{{ path('edit_artist', {'id': artist.id}) }}" role="button">Edit this artist</a>
+            <div class="card mb-4 border-primary" style="width: 20rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ artist.displayName }}</h5>
+                    <p class="card-text">{{ artist.displayName }} is of {{ artist.nationality }} nationality.</p>
+                    <p class="card-text"><strong>gender</strong> : {{ artist.gender }}.</p>
+                    <p class="card-text"><strong>begin date</strong> : {{ artist.getBeginDate }}, <strong>end date</strong> : {{ artist.getEndDate }}.</p>
+                    <a class="btn btn-primary card-link" href="{{ path('edit_artist', {'id': artist.id}) }}" role="button">Edit this artist</a>
+                    <a class="btn btn-danger card-link" href="{{ path('remove_artist', {'id': artist.id}) }}" role="button">Delete</a>
+                </div>
+            </div>
 
             {% if artist.artworks is not empty %}
-                <ul>
+                <h6 class="mt-4">Artist's artwork(s) :</h6>
+                <p>This artist has made {{ length }} artwork(s).</p>
+                <div class="container mt-4" style="display: flex; justify-content: space-evenly; flex-wrap: wrap;">
                     {% for artwork in artist.artworks %}
-                        <li>{{ artwork.name }}</li>
+                        <div class="card mb-4 border-success" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ artwork.title }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ artwork.name }}</h6>
+                                <p class="card-text">{{ artwork.classification }}</p>
+                                <a href="{{ path('one_artwork', {'id': artwork.id}) }}" class="btn btn-success card-link" role="button">Show this artwork</a>
+                                <a class="btn btn-danger card-link" href="{{ path('remove_artwork', {'id': artwork.id}) }}" role="button">Delete</a>
+                            </div>
+                        </div>
                     {% endfor %}
-                </ul>
+                </div>
             {% else %}
-                <p> No artwork(s) to display</p>
+                <p> No artwork(s) to display about this artist.</p>
             {% endif %}
         {% endif %}
     </div>

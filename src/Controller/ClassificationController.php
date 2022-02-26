@@ -68,13 +68,18 @@ class ClassificationController extends AbstractController
             return $this->redirectToRoute('all_classification');
         }
 
+        if ($classification->getArtworks() != null) {
+            $length = $classification->getArtworks()->count();
+        }
+
         if (isset($_GET['successMessage']) && !empty($_GET['successMessage'])) {
             $successMessage = htmlspecialchars($_GET['successMessage']);
         }
 
         return $this->render('classification/classification_show.html.twig', [
             'classification' => $classification,
-            'successMessage' => $successMessage
+            'successMessage' => $successMessage,
+            'length' => $length,
         ]);
     }
 
@@ -117,6 +122,13 @@ class ClassificationController extends AbstractController
 
         if ($classification) {
             $entityManager = $doctrine->getManager();
+
+            if ($classification->getArtworks() != null) {
+                foreach ($classification->getArtworks() as $artwork) {
+                    $entityManager->remove($artwork);
+                }
+            }
+
             $entityManager->remove($classification);
             $entityManager->flush();
             $deleteMessage = "Classification deleted successfully.";

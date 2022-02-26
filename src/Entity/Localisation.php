@@ -283,11 +283,11 @@ class Localisation
 
     public function __toString(): string
     {
-        return "country : " . $this->country . ", city : " . $this->city . ", region : " . $this->region . ", subregion : " . $this->subregion;
+        return "country : " . $this->country . ", city : " . $this->city . ", region : " . $this->region;
     }
 
     /**
-     * @return Collection<int, Artwork>
+     * @return Collection|Artwork[]
      */
     public function getArtworks(): Collection
     {

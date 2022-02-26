@@ -72,12 +72,17 @@ class ArtistController extends AbstractController
             return $this->redirectToRoute('all_artist');
         }
 
+        if ($artist->getArtworks() != null) {
+            $length = $artist->getArtworks()->count();
+        }
+
         if (isset($_GET['successMessage']) && !empty($_GET['successMessage'])) {
             $successMessage = htmlspecialchars($_GET['successMessage']);
         }
 
         return $this->render('artist/artist_show.html.twig', [
             'artist' => $artist,
+            'length' => $length,
             'successMessage' => $successMessage
         ]);
     }
@@ -121,6 +126,13 @@ class ArtistController extends AbstractController
 
         if ($artist) {
             $entityManager = $doctrine->getManager();
+
+            if ($artist->getArtworks() != null) {
+                foreach ($artist->getArtworks() as $artwork) {
+                    $entityManager->remove($artwork);
+                }
+            }
+
             $entityManager->remove($artist);
             $entityManager->flush();
             $deleteMessage = "Artist deleted successfully.";

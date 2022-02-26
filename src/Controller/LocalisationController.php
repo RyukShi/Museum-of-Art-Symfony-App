@@ -80,13 +80,18 @@ class LocalisationController extends AbstractController
             return $this->redirectToRoute('all_localisation');
         }
 
+        if ($localisation->getArtworks() != null) {
+            $length = $localisation->getArtworks()->count();
+        }
+
         if (isset($_GET['successMessage']) && !empty($_GET['successMessage'])) {
             $successMessage = htmlspecialchars($_GET['successMessage']);
         }
 
         return $this->render('localisation/localisation_show.html.twig', [
             'localisation' => $localisation,
-            'successMessage' => $successMessage
+            'successMessage' => $successMessage,
+            'length' => $length,
         ]);
     }
 
@@ -129,6 +134,13 @@ class LocalisationController extends AbstractController
 
         if ($localisation != null) {
             $entityManager = $doctrine->getManager();
+
+            if ($localisation->getArtworks() != null) {
+                foreach ($localisation->getArtworks() as $artwork) {
+                    $entityManager->remove($artwork);
+                }
+            }
+
             $entityManager->remove($localisation);
             $entityManager->flush();
             $deleteMessage = "Localisation deleted successfully.";

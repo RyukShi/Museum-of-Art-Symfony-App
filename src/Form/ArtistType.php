@@ -17,7 +17,6 @@ class ArtistType extends AbstractType
             ->add('end_date')
             ->add('gender')
             ->add('nationality')
-            ->add('artworks')
         ;
     }
 

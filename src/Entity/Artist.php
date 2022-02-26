@@ -131,11 +131,11 @@ class Artist
 
     public function __toString(): string
     {
-        return "name : " . $this->display_name . ", nationality : " . $this->nationality . ", gender : " . $this->gender;
+        return "name : " . $this->display_name;
     }
 
     /**
-     * @return Collection<int, Artwork>
+     * @return Collection|Artwork[]
      */
     public function getArtworks(): Collection
     {

@@ -69,6 +69,10 @@ class DatingArtworkController extends AbstractController
             return $this->redirectToRoute('all_dating_artwork');
         }
 
+        if ($dating->getArtworks() != null) {
+            $length = $dating->getArtworks()->count();
+        }
+
         if (isset($_GET['successMessage']) && !empty($_GET['successMessage'])) {
             $successMessage = htmlspecialchars($_GET['successMessage']);
         }
@@ -76,6 +80,7 @@ class DatingArtworkController extends AbstractController
         return $this->render('dating_artwork/dating_show.html.twig', [
             'dating' => $dating,
             'successMessage' => $successMessage,
+            'length' => $length,
         ]);
     }
 
@@ -118,6 +123,13 @@ class DatingArtworkController extends AbstractController
 
         if ($dating != null) {
             $entityManager = $doctrine->getManager();
+
+            if ($dating->getArtworks() != null) {
+                foreach ($dating->getArtworks() as $artwork) {
+                    $entityManager->remove($artwork);
+                }
+            }
+
             $entityManager->remove($dating);
             $entityManager->flush();
             $deleteMessage = "Dating Artwork deleted successfully.";

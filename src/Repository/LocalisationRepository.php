@@ -108,6 +108,11 @@ class LocalisationRepository extends ServiceEntityRepository
                 ->setParameter('excavation', "%{$search->excavation}%");
         }
 
+        if ($search->offset >= 0 && $search->limit >= 1 && $search->limit <= 30000) {
+            $query->setFirstResult($search->offset);
+            $query->setMaxResults($search->limit);
+        }
+
         $query->orderBy('l.city', 'ASC');
 
         return ($query->getQuery())->getResult();

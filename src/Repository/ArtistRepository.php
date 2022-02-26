@@ -60,6 +60,11 @@ class ArtistRepository extends ServiceEntityRepository
                 ->setParameter('nationality', "%{$search->nationality}%");
         }
 
+        if ($search->offset >= 0 && $search->limit >= 1 && $search->limit <= 30000) {
+            $query->setFirstResult($search->offset);
+            $query->setMaxResults($search->limit);
+        }
+
         $query->orderBy('a.display_name', 'ASC');
 
         return ($query->getQuery())->getResult();

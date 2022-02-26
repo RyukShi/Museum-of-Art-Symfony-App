@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="container">
-    <h4>{{ length }} artist(s) found</h4>
+    <h4 style="text-align: center;">{{ length }} artist(s) found</h4>
     {% if deleteMessage is not empty %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ deleteMessage }}
@@ -14,6 +14,9 @@
         </div>
     {% endif %}
 
+    <h6>Filter artist form : </h6>
+    <p>You can search by filtering certain fields such as the <strong>artist's name</strong> or <strong>artist's gender</strong> for example.</p>
+
     {{ form_start(searchArtistForm) }}
         <div style="display: flex; justify-content: space-evenly; flex-wrap: wrap;">
             {{ form_row(searchArtistForm.display_name )}}
@@ -21,6 +24,8 @@
             {{ form_row(searchArtistForm.end_date) }}
             {{ form_row(searchArtistForm.gender) }}
             {{ form_row(searchArtistForm.nationality) }}
+            {{ form_row(searchArtistForm.offset) }}
+            {{ form_row(searchArtistForm.limit) }}
         </div>
         <div class="mt-3">
             <button type="submit" class="btn btn-primary">Search !</button>

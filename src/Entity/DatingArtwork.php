@@ -74,7 +74,7 @@ class DatingArtwork
 
     public function __toString(): string
     {
-        return "object_begin_date : " . $this->object_begin_date . " object_end_date : " . $this->object_end_date;
+        return "Object Begin Date : " . $this->object_begin_date . " Object End Date : " . $this->object_end_date;
     }
 
     /**

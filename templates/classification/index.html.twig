@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="container">
-    <h4>{{ length }} classification(s) found</h4>
+    <h4 style="text-align: center;">{{ length }} classification(s) found</h4>
     {% if deleteMessage is not empty %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ deleteMessage }}
@@ -13,6 +13,9 @@
             </button>
         </div>
     {% endif %}
+
+    <h6>Filter classification form : </h6>
+    <p>You can search by filtering only the <strong>classification</strong> field.</p>
 
     {{ form_start(searchClassificationForm) }}
         {{ form_row(searchClassificationForm.classification) }}

@@ -14,9 +14,32 @@
         {% endif %}
         
         {% if dating is not empty %}
-            <p>{{ dating }}</p>
+
+            <h4>{{ dating }}</h4>
 
             <a class="btn btn-success" href="{{ path('edit_dating_artwork', {'id': dating.id}) }}" role="button">Edit this dating</a>
+            <a class="btn btn-danger" href="{{ path('remove_dating_artwork', {'id': dating.id}) }}" role="button">Delete</a>
+
+            {% if dating.artworks is not empty %}
+                <h6 class="mt-4">{{ length }} artwork(s) to display for this dating</h6>
+                <div class="container mt-4" style="display: flex; justify-content: space-evenly; flex-wrap: wrap;">
+                    {% for artwork in dating.artworks %}
+                        <div class="card mb-4 border-success" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ artwork.title }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ artwork.name }}</h6>
+                                <p class="card-text">dimensions : {{ artwork.dimensions }}</p>
+                                <p class="card-text">medium : {{ artwork.medium }}</p>
+                                <p class="card-text">{{ artwork.classification }}</p>
+                                <a href="{{ path('one_artwork', {'id': artwork.id}) }}" class="btn btn-success card-link" role="button">Show this artwork</a>
+                                <a href="{{ path('remove_artwork', {'id': artwork.id}) }}" class="btn btn-danger card-link" role="button">Delete</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Not artworks to display for this dating.</p>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

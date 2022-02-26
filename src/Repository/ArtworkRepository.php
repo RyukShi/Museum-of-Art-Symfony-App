@@ -60,6 +60,11 @@ class ArtworkRepository extends ServiceEntityRepository
                 ->setParameter('medium', "%{$search->medium}%");
         }
 
+        if ($search->offset >= 0 && $search->limit >= 1 && $search->limit <= 30000) {
+            $query->setFirstResult($search->offset);
+            $query->setMaxResults($search->limit);
+        }
+
         $query->orderBy('a.title', 'ASC');
 
         return ($query->getQuery())->getResult();

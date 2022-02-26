@@ -5,6 +5,8 @@ namespace App\Data;
 class SearchData
 {
     public int $page = 1;
+    public int $limit = 15000;
+    public int $offset = 0;
 
     // Artist
     public string $display_name;

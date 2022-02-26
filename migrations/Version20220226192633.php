@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220225184032 extends AbstractMigration
+final class Version20220226192633 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,7 +21,7 @@ final class Version20220225184032 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE artist (id SERIAL NOT NULL, display_name VARCHAR(5000) DEFAULT NULL, begin_date VARCHAR(5000) DEFAULT NULL, end_date VARCHAR(5000) DEFAULT NULL, gender VARCHAR(5000) DEFAULT NULL, nationality VARCHAR(5000) DEFAULT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE artwork (id SERIAL NOT NULL, classification_id INT DEFAULT NULL, dating_artwork_id INT DEFAULT NULL, artist_id INT DEFAULT NULL, localisation_id INT DEFAULT NULL, number VARCHAR(255) DEFAULT NULL, name VARCHAR(255) NOT NULL, title VARCHAR(255) DEFAULT NULL, dimensions VARCHAR(255) DEFAULT NULL, medium VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE artwork (id SERIAL NOT NULL, classification_id INT DEFAULT NULL, dating_artwork_id INT DEFAULT NULL, artist_id INT DEFAULT NULL, localisation_id INT DEFAULT NULL, number TEXT DEFAULT NULL, name TEXT DEFAULT NULL, title TEXT DEFAULT NULL, dimensions TEXT DEFAULT NULL, medium TEXT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_881FC5762A86559F ON artwork (classification_id)');
         $this->addSql('CREATE INDEX IDX_881FC5765D2BBF95 ON artwork (dating_artwork_id)');
         $this->addSql('CREATE INDEX IDX_881FC576B7970CF8 ON artwork (artist_id)');

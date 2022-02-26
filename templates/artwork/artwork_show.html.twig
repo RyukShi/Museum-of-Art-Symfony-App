@@ -14,9 +14,20 @@
         {% endif %}
         
         {% if artwork is not empty %}
-            <p>{{ artwork }}</p>
-
-            <a class="btn btn-success" href="{{ path('edit_artwork', {'id': artwork.id}) }}" role="button">Edit this artwork</a>
+            <div class="card mb-4 border-primary" style="width: 30rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ artwork.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ artwork.name }}</h6>
+                    <p class="card-text"><strong>artist</strong> : {{ artwork.artist }}</p>
+                    <p class="card-text"><strong>dimensions</strong> : {{ artwork.dimensions }}</p>
+                    <p class="card-text"><strong>medium</strong> : {{ artwork.medium }}</p>
+                    <p class="card-text"><strong>classification</strong> : {{ artwork.classification }}</p>
+                    <p class="card-text"><strong>dating</strong> : {{ artwork.getDatingArtwork }}</p>
+                    <p class="card-text"><strong>localisation</strong> : {{ artwork.localisation }}</p>
+                    <a class="btn btn-primary" href="{{ path('edit_artwork', {'id': artwork.id}) }}" role="button">Edit this artwork</a>
+                    <a class="btn btn-danger" href="{{ path('remove_artwork', {'id': artwork.id}) }}" role="button">Delete</a>
+                </div>
+            </div>
         {% endif %}
     </div>
 {% endblock %}
